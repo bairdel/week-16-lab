@@ -10,7 +10,7 @@ const router = express.Router();
  */
 router.get("/", (req, res) => {
   console.dir(req.query);
-  let language = req.query?.language;
+  let language = req.query.language;
   if (!language) {
     language = "english";
   }

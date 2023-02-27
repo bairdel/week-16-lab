@@ -1,0 +1,10 @@
+{
+    "Parameters": {
+      "VpcCidr": "10.0.0.0/22",
+      "PubSubnetACidr": "10.0.0.0/24",
+      "PubSubnetBCidr": "10.0.1.0/24",
+      "PrivSubnetACidr": "10.0.2.0/24",
+      "StudentName": "beck-sewart",
+      "EnvironmentName": "Poems"
+    }
+}

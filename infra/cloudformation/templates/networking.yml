@@ -1,0 +1,126 @@
+Description: Networking architecture
+
+Parameters:
+  VpcCidr:
+    Description: CIDR block for the VPC
+    Type: String
+  PubSubnetACidr:
+    Type: String
+  PubSubnetBCidr:
+    Type: String
+  PrivSubnetACidr:
+    Type: String
+  StudentName:
+    Type: String
+  EnvironmentName:
+    Type: String
+
+Resources:
+# VPC
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCidr
+      Tags:
+        - Key: Name
+          Value: !Sub "${StudentName}-vpc"
+
+# PubSubnetA
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: "eu-west-2a"
+      CidrBlock: !Ref PubSubnetACidr
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${StudentName} Public Subnet (AZ1)
+
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: "eu-west-2a"
+      CidrBlock: !Ref PubSubnetBCidr
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${StudentName} Public Subnet BZ1)
+
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: "eu-west-2a"
+      CidrBlock: !Ref PrivSubnetACidr
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${StudentName} Private Subnet AZ1)
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Ref EnvironmentName
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName} Public Routes
+
+  RoutePublicSubnet1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet1
+
+  RoutePublicSubnet2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet2
+
+  PrivateRouteTable1:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName} Private Routes (AZ1)
+
+  RoutePrivateSubnet1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable1
+      SubnetId: !Ref PrivateSubnet1
+
+  # NATGateway:
+  #   Type: AWS::EC2::NatGateway
+  #   Properties:
+  #     SubnetId: !Ref PrivateSubnet1
+
+# VPC Gateway Attachement
+
+# SubnetRouteTableAssociationA
+
+# Route Table Internet Gateway
+
+# Public Route
+
+# Outputs:
+#   VpcId:
+#     Description: Id of the Poem bucket
+#     Value: !Ref Vpc
+#     Export:
+#       Name: !Sub "${StudentName}-vpc-id"
+#   PubSubnetAId:
+#     Description: PubSubnetA ID
+#     Value: !Ref PubSubnetA
+#     Export:
+#       Name: !Sub "${StudentName}-pub-subnet-a-id"
